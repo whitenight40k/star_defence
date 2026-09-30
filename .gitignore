@@ -1,8 +1,8 @@
 # ============================================================
 #  《星球防线 / Star Defense》引擎工程 — Git 忽略规则
 #
-#  原则：**只忽略能由 Unity 重新生成的产物**。
-#  Assets / Packages / ProjectSettings / .workbuddy 一律入库。
+#  原则：Unity 运行所需内容入库；本地协作资料与可再生文件忽略。
+#  Assets / Packages / ProjectSettings 必须入库；.workbuddy 仅供本地使用。
 #
 #  两个最容易搞错的地方（都会静默地不报错）：
 #    · 不能忽略 .meta —— 丢了它 Unity 会重新生成 GUID，
@@ -10,6 +10,10 @@
 #    · 不能忽略 ProjectSettings —— 丢了它 TagManager 里的自定义层
 #      与 PlayerBody 层编号会重置，第一人称的自身遮挡剔除失效。
 # ============================================================
+
+# ---------- 本地协作资料与本机辅助脚本 ----------
+/.workbuddy/
+/scripts/push_star_defence_to_github.cmd
 
 # ---------- Unity 生成的缓存与中间产物 ----------
 [Ll]ibrary/

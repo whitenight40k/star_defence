@@ -173,18 +173,9 @@ Assets/StarDefense/
   Art/                  模型、贴图、材质、动画和 Prefab
   Scenes/               主场景
   Meshes/               生成的地形网格
-.workbuddy/             项目规则、美术契约和协作记录
 ```
 
 项目采用双工程结构：Unity 运行内容在本仓库；Blender 源文件和原始美术素材放在独立素材工程，`.blend` 文件不提交到 Unity 工程。
-
-更具体的开发约定见：
-
-- `.workbuddy/project-rules/PROJECT_PATHS.md`
-- `.workbuddy/project-rules/OBJECT_TAXONOMY.md`
-- `.workbuddy/project-rules/ASSET_BACKLOG.md`
-- `.workbuddy/skills/star-defense-production/`
-- `.workbuddy/skills/star-defense-art-style/`
 
 ## License
 

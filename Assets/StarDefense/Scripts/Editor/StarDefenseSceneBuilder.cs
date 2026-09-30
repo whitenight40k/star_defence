@@ -185,9 +185,22 @@ namespace StarDefense.EditorTools
 
             Selection.activeGameObject = gameObject;
             EditorSceneManager.SaveScene(scene, ScenePath);
-            EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene(ScenePath, true) };
+
+            // Build Settings 必须等 Refresh 之后再写，不能紧跟在 SaveScene 后面。
+            //
+            // 这个场景是 DeleteSceneAsset() 删掉旧资产之后新建的，所以在 SaveScene
+            // 刚返回的那一刻，AssetDatabase 里"路径 → GUID"的映射仍残留着**已被删除的
+            // 那个场景**的旧 GUID。此时构造 EditorBuildSettingsScene 会把它写进去；
+            // 而写出来的值与上一次完全相同，ProjectSettings 便不会被标脏 ⇒ 磁盘上的
+            // EditorBuildSettings.asset 原封不动，错误被静默保留下来。
+            //
+            // 实况：场景 meta 里的 GUID 早已换成新的，Build Settings 里却还是六天前的
+            // 旧值，文件时间也停在六天前 —— 从代码上看完全正常，只有把两边对起来读
+            // 才会发现。
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+
+            EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene(ScenePath, true) };
             Debug.Log($"[StarDefenseSceneBuilder] 第一版场景已生成：{ScenePath}");
         }
 

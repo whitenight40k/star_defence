@@ -53,8 +53,13 @@ namespace StarDefense.EditorTools
         ///   · <c>2026-09-30-respawn-anchor</c> —— 复活点从代码里的 <c>core + (6,0,6)</c> 偏移
         ///     改成场景里可拖动的锚点 <c>Respawn_Player_Base</c>（挂在基地平台上，接给
         ///     <c>PlayerDownedState.respawnPoint</c>）。旧偏移保留为老场景兜底。
+        ///   · <c>2026-09-30-build-settings-guid</c> —— **Build Settings 写早了一拍**。
+        ///     原先在 <c>SaveScene</c> 之后、<c>AssetDatabase.Refresh()</c> 之前写
+        ///     <c>EditorBuildSettings.scenes</c>：那一刻"路径 → GUID"映射里还留着**已被删掉的
+        ///     旧场景**的 GUID，写进去的值与上一次相同 ⇒ ProjectSettings 不标脏 ⇒ 磁盘上就此
+        ///     长期保存着一个失效 GUID（实测与场景真实 GUID 差了六天）。改为 Refresh 之后再写。
         /// </summary>
-        private const string BuilderRevision = "2026-09-30-respawn-anchor";
+        private const string BuilderRevision = "2026-09-30-build-settings-guid";
 
 
         private const string StructureMarker = "Assets/StarDefense/Art/.structure_assets_built";

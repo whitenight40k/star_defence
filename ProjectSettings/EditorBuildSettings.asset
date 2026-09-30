@@ -7,5 +7,5 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/StarDefense/Scenes/PlanetDefense_FirstVersion.unity
-    guid: 5cc04bffbbc97f7408b7850df9ea169c
+    guid: 5b2820b6dac1cbf4e8658cd13178df46
   m_configObjects: {}

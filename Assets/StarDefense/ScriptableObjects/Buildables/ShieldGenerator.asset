@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ce9193d7b3724449a90832d9c2a4cb3, type: 3}
+  m_Name: ShieldGenerator
+  m_EditorClassIdentifier: 
+  id: shield
+  displayName: "\u62A4\u76FE\u53D1\u751F\u5668"
+  hotkey: 7
+  color: {r: 0.25, g: 0.45, b: 0.72, a: 1}
+  prefab: {fileID: 0}
+  icon: {fileID: 2800000, guid: e068afbdc36c7d14f9c57ae9e46ef24f, type: 3}
+  cost:
+    metal: 60
+    energy: 0
+    crystal: 6
+  powerCost: 16
+  powerSupply: 0
+  buildSeconds: 4.2
+  capacityCost: 5
+  role: 1
+  maxHealth: 240
+  size: {x: 2.2, y: 2.2, z: 2.2}
+  supportRadius: 12
+  shieldAmount: 150
+  shieldRechargeDelay: 5
+  repairPerSecond: 14
+  repairEnergyPerTick: 1
+  isWeapon: 0
+  range: 0
+  damagePerShot: 0
+  fireInterval: 1
+  splashRadius: 0
+  slowMultiplier: 1

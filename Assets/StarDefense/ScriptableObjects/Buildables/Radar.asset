@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ce9193d7b3724449a90832d9c2a4cb3, type: 3}
+  m_Name: Radar
+  m_EditorClassIdentifier: 
+  id: radar
+  displayName: "\u96F7\u8FBE"
+  hotkey: 5
+  color: {r: 0.3, g: 0.48, b: 0.55, a: 1}
+  prefab: {fileID: 0}
+  icon: {fileID: 2800000, guid: fac80aa577748fc4c91744212c4b4333, type: 3}
+  cost:
+    metal: 35
+    energy: 8
+    crystal: 0
+  powerCost: 6
+  powerSupply: 0
+  buildSeconds: 3
+  capacityCost: 3
+  role: 0
+  maxHealth: 170
+  size: {x: 1.3, y: 3.2, z: 1.3}
+  supportRadius: 12
+  shieldAmount: 150
+  shieldRechargeDelay: 5
+  repairPerSecond: 14
+  repairEnergyPerTick: 1
+  isWeapon: 0
+  range: 0
+  damagePerShot: 0
+  fireInterval: 1
+  splashRadius: 0
+  slowMultiplier: 1

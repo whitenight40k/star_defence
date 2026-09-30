@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ce9193d7b3724449a90832d9c2a4cb3, type: 3}
+  m_Name: TeslaTower
+  m_EditorClassIdentifier: 
+  id: tesla
+  displayName: "\u7535\u78C1\u5854"
+  hotkey: 3
+  color: {r: 0.37, g: 0.31, b: 0.55, a: 1}
+  prefab: {fileID: 1323842459829081745, guid: 3f5257447b58e5a4da1824c9626ea3af, type: 3}
+  icon: {fileID: 2800000, guid: e60d7ae134c7ce044820b8e35fa49c31, type: 3}
+  cost:
+    metal: 55
+    energy: 10
+    crystal: 0
+  powerCost: 12
+  powerSupply: 0
+  buildSeconds: 3.6
+  capacityCost: 3
+  role: 0
+  maxHealth: 220
+  size: {x: 1.5, y: 2.5, z: 1.5}
+  supportRadius: 12
+  shieldAmount: 150
+  shieldRechargeDelay: 5
+  repairPerSecond: 14
+  repairEnergyPerTick: 1
+  isWeapon: 1
+  range: 18
+  damagePerShot: 14
+  fireInterval: 0.65
+  splashRadius: 3.5
+  slowMultiplier: 0.45

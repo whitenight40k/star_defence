@@ -1,0 +1,70 @@
+# ============================================================
+#  《星球防线 / Star Defense》引擎工程 — Git 忽略规则
+#
+#  原则：**只忽略能由 Unity 重新生成的产物**。
+#  Assets / Packages / ProjectSettings / .workbuddy 一律入库。
+#
+#  两个最容易搞错的地方（都会静默地不报错）：
+#    · 不能忽略 .meta —— 丢了它 Unity 会重新生成 GUID，
+#      Prefab / 场景上所有引用当场断掉，而工程能正常打开。
+#    · 不能忽略 ProjectSettings —— 丢了它 TagManager 里的自定义层
+#      与 PlayerBody 层编号会重置，第一人称的自身遮挡剔除失效。
+# ============================================================
+
+# ---------- Unity 生成的缓存与中间产物 ----------
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
+[Rr]ecordings/
+ExportedObj/
+.consulo/
+.idea/
+.vs/
+
+# 崩溃报告
+sysinfo.txt
+
+# ---------- 自动生成的解决方案与工程文件 ----------
+# Star_defence.sln / Assembly-CSharp*.csproj / Unity.UOS.Encrypt.csproj
+# 全部由 Unity 在打开工程时按 Packages 重新生成，入库只会互相覆盖。
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# meta 文件的伴生产物
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# ---------- 打包产物 ----------
+*.apk
+*.aab
+*.unitypackage
+*.app
+
+# ---------- 第三方生成物 ----------
+crashlytics-build.properties
+
+# ---------- Addressables / 流式资源 ----------
+/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
+/[Aa]ssets/[Ss]treamingAssets/aa.meta
+/[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# ---------- 保留：Assets 下所有 .meta 必须入库 ----------
+!/[Aa]ssets/**/*.meta

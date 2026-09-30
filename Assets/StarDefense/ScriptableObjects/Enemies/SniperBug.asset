@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57a1cb8dc04cac64997e8225efb212d4, type: 3}
+  m_Name: SniperBug
+  m_EditorClassIdentifier: 
+  id: sniper
+  displayName: "\u72D9\u51FB\u866B"
+  color: {r: 0.24, g: 0.42, b: 0.28, a: 1}
+  maxHealth: 58
+  moveSpeed: 2.7
+  damage: 15
+  attackInterval: 0.8
+  attackRange: 18
+  radius: 1
+  explodesOnContact: 0
+  explosionRadius: 0
+  isBoss: 0
+  prefab: {fileID: 5643117569017574082, guid: 5594fefd6d031e744b201c53fe76db0b, type: 3}
+  behavior: 3
+  behaviorRange: 13
+  behaviorInterval: 0
+  behaviorValue: 0

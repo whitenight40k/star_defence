@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ce9193d7b3724449a90832d9c2a4cb3, type: 3}
+  m_Name: RepairStation
+  m_EditorClassIdentifier: 
+  id: repair
+  displayName: "\u7EF4\u4FEE\u7AD9"
+  hotkey: 6
+  color: {r: 0.36, g: 0.52, b: 0.36, a: 1}
+  prefab: {fileID: 0}
+  icon: {fileID: 2800000, guid: ea5f89afe4739b5459cb822d622f555c, type: 3}
+  cost:
+    metal: 50
+    energy: 12
+    crystal: 0
+  powerCost: 10
+  powerSupply: 0
+  buildSeconds: 3.6
+  capacityCost: 4
+  role: 2
+  maxHealth: 200
+  size: {x: 2.2, y: 1.4, z: 2.2}
+  supportRadius: 14
+  shieldAmount: 150
+  shieldRechargeDelay: 5
+  repairPerSecond: 14
+  repairEnergyPerTick: 1
+  isWeapon: 0
+  range: 0
+  damagePerShot: 0
+  fireInterval: 1
+  splashRadius: 0
+  slowMultiplier: 1

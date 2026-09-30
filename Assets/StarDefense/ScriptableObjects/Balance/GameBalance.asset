@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9561ca0ce5e21a944b2ecd47126787b6, type: 3}
+  m_Name: GameBalance
+  m_EditorClassIdentifier: 
+  expansionStart: 60
+  defenseStart: 240
+  bossWarningStart: 480
+  bossStart: 600
+  evacuationStart: 900
+  evacuationDuration: 90
+  startingResources:
+    metal: 120
+    energy: 45
+    crystal: 6
+  buildingCapacity: 20
+  demolishRefundRatio: 0.5
+  passiveThreatPerSecond: 0.05
+  miningThreat: 0.65
+  buildThreat: 2.5
+  waveThreshold: 100
+  playerMaxHealth: 120
+  gunDamage: 18
+  gunRange: 45
+  gunFireInterval: 0.16
+  pickaxeDamage: 22
+  pickaxeRange: 3.5
+  interactRange: 4
+  allyCount: 3
+  allyResourceInterval: 3.5
+  allyResourceAmount: 6

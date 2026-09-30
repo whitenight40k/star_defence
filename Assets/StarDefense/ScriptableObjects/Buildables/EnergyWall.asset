@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ce9193d7b3724449a90832d9c2a4cb3, type: 3}
+  m_Name: EnergyWall
+  m_EditorClassIdentifier: 
+  id: wall
+  displayName: "\u80FD\u91CF\u5899"
+  hotkey: 4
+  color: {r: 0.48, g: 0.55, b: 0.65, a: 1}
+  prefab: {fileID: 4129273944381958754, guid: 050743fef1127794281daa3e9658c749, type: 3}
+  icon: {fileID: 2800000, guid: a1eb15945c0c30340ab55c9427c5d3c7, type: 3}
+  cost:
+    metal: 20
+    energy: 0
+    crystal: 0
+  powerCost: 2
+  powerSupply: 0
+  buildSeconds: 1.6
+  capacityCost: 1
+  role: 0
+  maxHealth: 460
+  size: {x: 3.8, y: 1.6, z: 0.8}
+  supportRadius: 12
+  shieldAmount: 150
+  shieldRechargeDelay: 5
+  repairPerSecond: 14
+  repairEnergyPerTick: 1
+  isWeapon: 0
+  range: 0
+  damagePerShot: 0
+  fireInterval: 1
+  splashRadius: 0
+  slowMultiplier: 1

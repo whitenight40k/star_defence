@@ -1,0 +1,58 @@
+# ============================================================
+#  行尾策略（Unity 工程专用）
+#
+#  为什么不用业界常见的 `* text=auto`：
+#  它会让 git 在检出时把 LF 换成 CRLF，而 Unity 写回这些文件时又用 LF
+#  —— 于是每次打开工程都会产生"整文件重写"的假 diff，
+#  真实的改动被淹没在几万行噪音里，review 时完全看不出来。
+#
+#  这里一律不做转换（-text = 按二进制原样存取），
+#  让 Unity 与 Blender 自己决定行尾，git 只管存字节。
+# ============================================================
+
+# Unity 的文本型资产：原样存，不归一化
+*.unity      -text
+*.prefab     -text
+*.asset      -text
+*.meta       -text
+*.mat        -text
+*.controller -text
+*.anim       -text
+*.overrideController -text
+*.physicMaterial -text
+*.physicsMaterial2D -text
+*.mask       -text
+
+# 代码：原样存，但让 git 识别为文本以便正确合并
+*.cs         -text diff=csharp
+*.shader     -text
+*.compute    -text
+
+# 配置与文档
+*.json       -text
+*.md         -text
+*.txt        -text
+*.xml        -text
+*.asmdef     -text
+
+# 二进制资产：明确标记，避免 git 做任何猜测
+*.png        binary
+*.jpg        binary
+*.jpeg       binary
+*.tga        binary
+*.psd        binary
+*.exr        binary
+*.hdr        binary
+*.fbx        binary
+*.blend      binary
+*.blend1     binary
+*.obj        binary
+*.dae        binary
+*.wav        binary
+*.mp3        binary
+*.ogg        binary
+*.ttf        binary
+*.otf        binary
+*.dll        binary
+*.so         binary
+*.bundle     binary

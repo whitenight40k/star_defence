@@ -134,7 +134,10 @@ namespace StarDefense
 
             Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
             RaycastHit hit;
-            if (!Physics.Raycast(ray, out hit, maxDistance))
+            // 半成品建筑只留下施工射线代理；摆放射线要忽略它，位置仍取真正的地面。
+            if (!Physics.Raycast(
+                    ray, out hit, maxDistance,
+                    Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
             {
                 HideGhost();
                 return;

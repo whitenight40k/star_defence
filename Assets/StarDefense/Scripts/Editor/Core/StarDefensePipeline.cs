@@ -58,8 +58,11 @@ namespace StarDefense.EditorTools
         ///     <c>EditorBuildSettings.scenes</c>：那一刻"路径 → GUID"映射里还留着**已被删掉的
         ///     旧场景**的 GUID，写进去的值与上一次相同 ⇒ ProjectSettings 不标脏 ⇒ 磁盘上就此
         ///     长期保存着一个失效 GUID（实测与场景真实 GUID 差了六天）。改为 Refresh 之后再写。
+        ///   · <c>2026-09-30-construction-proxy</c> —— 施工状态不再把原碰撞体直接改成 Trigger：
+        ///     凹面 MeshCollider 不支持 Trigger；旧逻辑还把条件写反，曾把初始发电机的 BoxCollider
+        ///     序列化成 <c>m_IsTrigger: 1</c>。改为"关闭原实体 + 独立 BoxCollider 射线代理"并重建场景。
         /// </summary>
-        private const string BuilderRevision = "2026-09-30-build-settings-guid";
+        private const string BuilderRevision = "2026-09-30-construction-proxy";
 
 
         private const string StructureMarker = "Assets/StarDefense/Art/.structure_assets_built";

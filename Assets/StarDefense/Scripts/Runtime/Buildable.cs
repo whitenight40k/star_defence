@@ -30,8 +30,16 @@ namespace StarDefense
         /// <summary>本实例层级里的全部碰撞体。美术件挂在子网格上，程序化占位件挂在根上，两处都要收。</summary>
         private Collider[] colliders;
 
-        /// <summary>上面每个碰撞体**本来的** isTrigger 值，用于建成后精确还原。</summary>
+        /// <summary>每个原始碰撞体的 enabled / isTrigger，用于建成后原样还原。</summary>
+        private bool[] colliderEnabled;
         private bool[] colliderTriggers;
+
+        /// <summary>
+        /// 施工时专供镐子、修理和拆除射线命中的触发代理。
+        /// 美术件使用凹面 MeshCollider，Unity 禁止把它直接改成 Trigger；因此施工时关闭原碰撞体，
+        /// 只留下这个 BoxCollider。玩家与敌人都忽略 Trigger，但交互射线显式查询它。
+        /// </summary>
+        private BoxCollider constructionRaycastProxy;
 
         /// <summary>
         /// 染色是否必须走 <see cref="MaterialPropertyBlock"/>。
@@ -125,10 +133,8 @@ namespace StarDefense
         }
 
         /// <summary>
-        /// 记下每个碰撞体的原始 isTrigger。**只采一次。**
-        ///
-        /// 重复采会把"施工中被改成触发器"的那个状态记成原始值，于是建成后还原成触发器 ——
-        /// 建筑从此永远不挡路，而且全程不报错（表现为虫子穿墙、玩家穿墙，像碰撞体丢了）。
+        /// 记下层级里原始碰撞体的 enabled / isTrigger。**只采一次。**
+        /// 施工代理会在这之后才创建，因此不会混进原始碰撞体数组。
         /// </summary>
         private void CacheColliders()
         {
@@ -136,40 +142,157 @@ namespace StarDefense
                 return;
 
             colliders = GetComponentsInChildren<Collider>(true);
+            colliderEnabled = new bool[colliders.Length];
             colliderTriggers = new bool[colliders.Length];
             for (int i = 0; i < colliders.Length; i++)
-                colliderTriggers[i] = colliders[i] != null && colliders[i].isTrigger;
+            {
+                Collider target = colliders[i];
+                colliderEnabled[i] = target != null && target.enabled;
+                colliderTriggers[i] = target != null && target.isTrigger;
+            }
         }
 
         /// <summary>
-        /// 按建造进度切换碰撞体形态 —— **没建完的建筑不挡路**。
+        /// 按施工状态切换两套碰撞形态：
         ///
-        /// 施工中把碰撞体改成**触发器**：玩家的 CharacterController 与敌人的前方探测都不理会触发器，
-        /// 于是"进度不满的建筑"既不挡人、也不会被虫子当成障碍（虫子直接穿过去，
-        /// 不会停下来拆一个还没成型的地基）。
+        /// · 施工中：关闭美术 / 占位件原本的实体碰撞体，只启用一个 BoxCollider 触发代理。
+        ///   玩家和敌人的移动查询都忽略 Trigger，因此可以穿过；镐子、修理与拆除射线显式查询 Trigger，
+        ///   所以仍能点中建筑，不会卡在 0%。
+        /// · 建成后：关闭代理，把所有原始碰撞体的 enabled / isTrigger 原样还原。
         ///
-        /// 而镐子 / 修理 / 拆除走的是 <c>Physics.Raycast</c>，工程设置里
-        /// <c>m_QueriesHitTriggers = 1</c>（ProjectSettings/DynamicsManager.asset），**照样能命中**。
-        /// 这一点是硬前提：施工进度的**唯一**来源就是"射线打中这座建筑"
-        /// （见 <see cref="PlayerToolController"/> 的 <c>TryGather</c>），
-        /// 把碰撞体整个移除会让建筑永远停在 0% —— 所以这里改的是 isTrigger，不是 enabled。
-        ///
-        /// 建成后按 <see cref="colliderTriggers"/> 的原值还原，而不是一律设回 false：
-        /// 资产自带的触发器不该被这里顺手改掉。
+        /// 不能把原碰撞体直接设成 Trigger：建筑美术使用的是凹面 MeshCollider，Unity 明确不支持
+        /// <c>convex = false</c> 与 <c>isTrigger = true</c> 的组合，会报
+        /// “Triggers on concave MeshColliders are not supported”。
         /// </summary>
         private void ApplyConstructionCollision()
         {
             if (colliders == null)
                 return;
 
+            if (constructed)
+            {
+                if (constructionRaycastProxy != null)
+                    constructionRaycastProxy.enabled = false;
+
+                for (int i = 0; i < colliders.Length; i++)
+                {
+                    Collider target = colliders[i];
+                    if (target == null)
+                        continue;
+
+                    target.isTrigger = colliderTriggers[i];
+                    target.enabled = colliderEnabled[i];
+                }
+                return;
+            }
+
+            EnsureConstructionRaycastProxy();
             for (int i = 0; i < colliders.Length; i++)
             {
                 Collider target = colliders[i];
+                if (target != null)
+                    target.enabled = false;
+            }
+
+            if (constructionRaycastProxy != null)
+                constructionRaycastProxy.enabled = true;
+        }
+
+        /// <summary>
+        /// 创建一个世界轴对齐的施工射线代理。尺寸来自原碰撞体的世界包围盒；代理只负责“点得到”，
+        /// 不参与移动碰撞，所以这里宁可略宽，也不能小到让建筑边缘无法继续施工。
+        /// </summary>
+        private void EnsureConstructionRaycastProxy()
+        {
+            if (constructionRaycastProxy != null)
+                return;
+
+            bool hasBounds = TryGetOriginalColliderBounds(out Bounds bounds);
+            if (!hasBounds)
+                hasBounds = TryGetRendererBounds(out bounds);
+
+            if (!hasBounds)
+            {
+                Vector3 size = config != null ? config.size : Vector3.one;
+                float width = Mathf.Max(0.4f, Mathf.Max(size.x, size.z));
+                float height = Mathf.Max(0.4f, size.y);
+                bounds = new Bounds(
+                    transform.position + Vector3.up * (height * 0.5f),
+                    new Vector3(width, height, width));
+            }
+
+            GameObject proxyObject = new GameObject("ConstructionRaycastProxy");
+            proxyObject.layer = gameObject.layer;
+            Transform proxyTransform = proxyObject.transform;
+            proxyTransform.SetParent(transform, true);
+            proxyTransform.SetPositionAndRotation(bounds.center, Quaternion.identity);
+
+            constructionRaycastProxy = proxyObject.AddComponent<BoxCollider>();
+            constructionRaycastProxy.isTrigger = true;
+
+            Vector3 scale = proxyTransform.lossyScale;
+            constructionRaycastProxy.size = new Vector3(
+                Mathf.Max(0.1f, bounds.size.x / Mathf.Max(0.0001f, Mathf.Abs(scale.x))),
+                Mathf.Max(0.1f, bounds.size.y / Mathf.Max(0.0001f, Mathf.Abs(scale.y))),
+                Mathf.Max(0.1f, bounds.size.z / Mathf.Max(0.0001f, Mathf.Abs(scale.z))));
+        }
+
+        private bool TryGetOriginalColliderBounds(out Bounds bounds)
+        {
+            bounds = default;
+            bool found = false;
+
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                Collider target = colliders[i];
+                if (target == null || !colliderEnabled[i])
+                    continue;
+
+                Bounds candidate = target.bounds;
+                if (candidate.size.sqrMagnitude <= 0.000001f)
+                    continue;
+
+                if (!found)
+                {
+                    bounds = candidate;
+                    found = true;
+                }
+                else
+                {
+                    bounds.Encapsulate(candidate);
+                }
+            }
+
+            return found;
+        }
+
+        private bool TryGetRendererBounds(out Bounds bounds)
+        {
+            bounds = default;
+            bool found = false;
+
+            for (int i = 0; i < renderers.Length; i++)
+            {
+                Renderer target = renderers[i];
                 if (target == null)
                     continue;
 
-                target.isTrigger = constructed || colliderTriggers[i];
+                Bounds candidate = target.bounds;
+                if (candidate.size.sqrMagnitude <= 0.000001f)
+                    continue;
+
+                if (!found)
+                {
+                    bounds = candidate;
+                    found = true;
+                }
+                else
+                {
+                    bounds.Encapsulate(candidate);
+                }
             }
+
+            return found;
         }
 
         public void SetPowered(bool isPowered)

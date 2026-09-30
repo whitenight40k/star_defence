@@ -375,9 +375,9 @@ namespace StarDefense
             //   · 玩家的枪与镐靠 Physics.Raycast 命中，没有碰撞体是打不中且不报错。
             // 虚影走的是另一条路径（不经过这里），所以这个补丁不会把虚影也弄成挡路的。
             //
-            // 碰撞体形态随后由 Buildable 按建造进度切换：**没建完的走触发器**（不挡人、
-            // 不被虫子当成障碍，但镐子仍能命中它继续施工），建成后才变回实体。见
-            // Buildable.ApplyConstructionCollision。
+            // 碰撞体形态随后由 Buildable 按建造进度切换：没建完时关闭原实体碰撞体，
+            // 只留下一个 BoxCollider 触发代理（不挡人、不被虫子当成障碍，但镐子仍能命中）；
+            // 建成后关闭代理并原样恢复实体。不能把美术件的凹面 MeshCollider 直接设成 Trigger。
             if (!useArt)
                 EnsurePlaceholderCollider(go, config);
 
@@ -443,7 +443,7 @@ namespace StarDefense
         /// 给程序化占位件补一个碰撞体。美术资产自带 MeshCollider，只有占位件需要这一步。
         ///
         /// 补出来的是**实体**碰撞体，但"是否挡路"由 <see cref="Buildable"/> 按建造进度决定 ——
-        /// 施工中的建筑会被切成触发器（见 <c>Buildable.ApplyConstructionCollision</c>）。
+        /// 施工中关闭它并启用独立的射线触发代理，建成后再原样恢复。
         ///
         /// 尺度换算必须与 <see cref="ProcPrototypes.CreateBuilding"/> 逐字一致：
         /// 那边把"宽 × 高 × 深"压成"方形底面 × 高"（width = max(size.x, size.z)），

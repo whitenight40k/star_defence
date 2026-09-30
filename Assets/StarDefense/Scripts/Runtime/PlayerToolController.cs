@@ -337,7 +337,9 @@ namespace StarDefense
         private void ShootGun()
         {
             Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-            if (Physics.Raycast(ray, out RaycastHit hit, game.Balance.gunRange))
+            if (Physics.Raycast(
+                    ray, out RaycastHit hit, game.Balance.gunRange,
+                    Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
             {
                 EnemyUnit enemy = hit.collider.GetComponentInParent<EnemyUnit>();
                 if (enemy != null)
@@ -353,7 +355,10 @@ namespace StarDefense
         private void TryGather()
         {
             Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-            if (!Physics.Raycast(ray, out RaycastHit hit, game.Balance.pickaxeRange))
+            // 施工中的建筑只留下触发代理；这里必须显式 Collide，不能依赖工程全局开关。
+            if (!Physics.Raycast(
+                    ray, out RaycastHit hit, game.Balance.pickaxeRange,
+                    Physics.DefaultRaycastLayers, QueryTriggerInteraction.Collide))
                 return;
 
             Buildable buildable = hit.collider.GetComponentInParent<Buildable>();
@@ -408,7 +413,9 @@ namespace StarDefense
 
             // 无虚影组件时的退路（老场景）：自己打一条射线，判定与虚影保持一致。
             Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-            if (!Physics.Raycast(ray, out RaycastHit hit, 18f))
+            if (!Physics.Raycast(
+                    ray, out RaycastHit hit, 18f,
+                    Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
                 return;
 
             if (hit.normal.y < 0.7f)
@@ -475,7 +482,9 @@ namespace StarDefense
         private void TryRepair()
         {
             Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-            if (!Physics.Raycast(ray, out RaycastHit hit, game.Balance.interactRange))
+            if (!Physics.Raycast(
+                    ray, out RaycastHit hit, game.Balance.interactRange,
+                    Physics.DefaultRaycastLayers, QueryTriggerInteraction.Collide))
                 return;
 
             Buildable buildable = hit.collider.GetComponentInParent<Buildable>();
@@ -494,7 +503,9 @@ namespace StarDefense
         private void TryDemolish()
         {
             Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-            if (!Physics.Raycast(ray, out RaycastHit hit, game.Balance.interactRange))
+            if (!Physics.Raycast(
+                    ray, out RaycastHit hit, game.Balance.interactRange,
+                    Physics.DefaultRaycastLayers, QueryTriggerInteraction.Collide))
                 return;
 
             Buildable buildable = hit.collider.GetComponentInParent<Buildable>();
